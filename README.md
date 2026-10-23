@@ -4,8 +4,7 @@ Museo virtual interactivo para recorrer, en primera persona (3D) o desde arriba 
 
 > Proyecto de la exposición del **Grupo 5**, Universidad EAN (Bogotá, Colombia).
 
-**Demo 3D:** https://claude.ai/artifact/HgHKuXypbqzCGMsrG69U5r
-**Demo 2D:** https://claude.ai/artifact/Q91aGqvmxYqt9Wu6MZ18cv
+**Demo:** 
 
 ---
 
