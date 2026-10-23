@@ -3,363 +3,359 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Museo del Emprendimiento</title>
+  <title>Museo del Emprendimiento · Menú Principal</title>
   
-  <!-- Tipografía elegante desde Google Fonts -->
+  <!-- Fuentes elegantes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0b0908;
-      --glass: rgba(22, 18, 15, 0.72);
-      --glass-border: rgba(242, 184, 75, 0.22);
-      --glass-hover: rgba(35, 28, 22, 0.85);
-      --ink: #f7f3ec;
-      --mut: #c5bbb0;
+      --bg: #0c0a09;
+      --card-bg: rgba(22, 19, 16, 0.82);
+      --card-border: rgba(242, 184, 75, 0.18);
+      --card-hover-border: rgba(242, 184, 75, 0.65);
+      --ink: #f7f4ee;
+      --ink-mut: #a39e93;
       --acc: #f2b84b;
-      --acc-glow: rgba(242, 184, 75, 0.35);
+      --acc-glow: rgba(242, 184, 75, 0.25);
+      --glass-line: rgba(255, 255, 255, 0.08);
+      box-sizing: border-box;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      background-color: var(--bg);
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--bg);
       color: var(--ink);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: clamp(16px, 4vw, 40px);
+      padding-top: max(clamp(16px, 4vw, 40px), env(safe-area-inset-top));
+      padding-bottom: max(clamp(16px, 4vw, 40px), env(safe-area-inset-bottom));
     }
 
-    /* Fondo animado estilo galería/museo */
-    .bg-container {
+    /* Fondo simulado de museo */
+    .museum-bg {
       position: fixed;
       inset: 0;
-      z-index: 1;
       background: 
-        radial-gradient(circle at 50% 30%, rgba(242, 184, 75, 0.12) 0%, transparent 60%),
-        radial-gradient(circle at 15% 80%, rgba(139, 90, 43, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 85% 80%, rgba(30, 25, 20, 0.8) 0%, transparent 50%),
-        linear-gradient(to bottom, #110d0a, #070605);
+        radial-gradient(circle at 50% 15%, rgba(242, 184, 75, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 10% 90%, rgba(120, 80, 20, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(120, 80, 20, 0.08) 0%, transparent 50%),
+        linear-gradient(180deg, #14110e 0%, #080706 100%);
+      z-index: -2;
     }
 
-    /* Patrón sutil de arquitectura de museo */
-    .bg-grid {
-      position: absolute;
+    /* Patrón de textura */
+    .museum-texture {
+      position: fixed;
       inset: 0;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
-      -webkit-mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
-    }
-
-    /* Foco de luz superior central */
-    .spotlight {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(ellipse at top, rgba(242, 184, 75, 0.18) 0%, rgba(0, 0, 0, 0) 70%);
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+      z-index: -1;
       pointer-events: none;
     }
 
-    /* Contenedor Principal */
     .container {
-      position: relative;
-      z-index: 2;
-      height: 100%;
+      width: min(960px, 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 24px;
-      text-align: center;
+      gap: clamp(24px, 5vh, 48px);
+      z-index: 1;
+      margin: auto 0;
     }
 
     /* Encabezado */
-    .header {
+    header {
+      text-align: center;
       max-width: 680px;
-      margin-bottom: 40px;
-      animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
 
-    .tagline {
-      display: inline-block;
-      font-family: 'Cinzel', serif;
-      font-size: 13px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: rgba(242, 184, 75, 0.08);
+      border: 1px solid rgba(242, 184, 75, 0.25);
       color: var(--acc);
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--glass-border);
-      padding-bottom: 4px;
+      font-size: clamp(11px, 2.5vw, 12px);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
 
     h1 {
       font-family: 'Cinzel', serif;
-      font-size: clamp(32px, 5vw, 54px);
-      font-weight: 700;
+      font-size: clamp(26px, 6vw, 48px);
+      font-weight: 800;
       line-height: 1.15;
-      letter-spacing: 1px;
-      color: var(--ink);
+      letter-spacing: -0.5px;
+      color: #ffffff;
       text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-      margin-bottom: 16px;
     }
 
     h1 span {
-      background: linear-gradient(135deg, #ffe094 0%, #f2b84b 50%, #b87b14 100%);
+      background: linear-gradient(135deg, #fce38a 0%, var(--acc) 50%, #c88921 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .description {
-      font-size: clamp(14px, 1.8vw, 16px);
-      color: var(--mut);
+    .subtitle {
+      font-size: clamp(14px, 3vw, 16px);
       line-height: 1.6;
-      font-weight: 300;
+      color: var(--ink-mut);
+      max-width: 540px;
     }
 
-    /* Tarjetas de Selección de Modo */
-    .options-grid {
-      display: flex;
-      gap: 24px;
+    /* Cuadrícula de Modos */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(16px, 3vw, 28px);
       width: 100%;
-      max-width: 820px;
-      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+    }
+
+    /* Tarjetas interactiva */
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      border-radius: 20px;
+      outline: none;
+      cursor: pointer;
     }
 
     .card {
-      flex: 1;
       position: relative;
-      background: var(--glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
+      height: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 36px 28px;
-      text-decoration: none;
-      color: var(--ink);
+      padding: clamp(20px, 4vw, 32px);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      justify-content: space-between;
+      gap: 20px;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                  border-color 0.3s ease, 
+                  box-shadow 0.3s ease;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
       overflow: hidden;
-      cursor: pointer;
     }
 
     .card::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(242, 184, 75, 0.15), transparent 70%);
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--acc), transparent);
       opacity: 0;
-      transition: opacity 0.4s;
+      transition: opacity 0.3s ease;
     }
 
-    .card:hover {
-      transform: translateY(-8px);
-      background: var(--glass-hover);
-      border-color: rgba(242, 184, 75, 0.5);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--acc-glow);
+    .card-link:hover .card,
+    .card-link:focus-visible .card {
+      transform: translateY(-6px);
+      border-color: var(--card-hover-border);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 24px var(--acc-glow);
     }
 
-    .card:hover::before {
+    .card-link:hover .card::before,
+    .card-link:focus-visible .card::before {
       opacity: 1;
     }
 
-    .icon-wrapper {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
+    .card-icon {
+      width: clamp(48px, 10vw, 60px);
+      height: clamp(48px, 10vw, 60px);
+      border-radius: 14px;
       background: rgba(242, 184, 75, 0.08);
       border: 1px solid rgba(242, 184, 75, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
-      margin-bottom: 20px;
-      transition: transform 0.4s, background-color 0.4s;
+      font-size: clamp(24px, 5vw, 30px);
+      color: var(--acc);
+      flex-shrink: 0;
     }
 
-    .card:hover .icon-wrapper {
-      transform: scale(1.1);
-      background: rgba(242, 184, 75, 0.18);
-      border-color: var(--acc);
-    }
-
-    .card-title {
+    .card-body h2 {
       font-family: 'Cinzel', serif;
-      font-size: 22px;
+      font-size: clamp(20px, 4vw, 24px);
       font-weight: 700;
-      margin-bottom: 10px;
-      color: var(--ink);
+      color: #ffffff;
+      margin-bottom: 8px;
     }
 
-    .card-desc {
-      font-size: 13.5px;
-      color: var(--mut);
+    .card-body p {
+      font-size: clamp(13px, 2.8vw, 14.5px);
       line-height: 1.55;
-      margin-bottom: 24px;
-      flex-grow: 1;
+      color: var(--ink-mut);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: auto;
     }
 
     .btn-action {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      color: var(--acc);
-      text-transform: uppercase;
-      padding: 10px 20px;
-      border-radius: 30px;
-      background: rgba(242, 184, 75, 0.08);
-      border: 1px solid rgba(242, 184, 75, 0.25);
-      transition: all 0.3s;
-      pointer-events: none; /* Asegura que el clic active la etiqueta <a> principal */
+      padding: clamp(10px, 2.5vw, 12px) clamp(16px, 4vw, 20px);
+      border-radius: 10px;
+      background: var(--acc);
+      color: #120e08;
+      font-weight: 700;
+      font-size: clamp(12px, 2.5vw, 13px);
+      letter-spacing: 0.2px;
+      pointer-events: none;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      width: 100%;
+      justify-content: center;
     }
 
-    .card:hover .btn-action {
-      background: var(--acc);
-      color: #110d0a;
-      box-shadow: 0 4px 15px rgba(242, 184, 75, 0.4);
+    .card-link:hover .btn-action {
+      background: #f7cb6b;
+    }
+
+    .btn-action svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .card-link:hover .btn-action svg {
+      transform: translateX(4px);
     }
 
     /* Footer */
-    .footer {
-      position: absolute;
-      bottom: 24px;
-      font-size: 12px;
-      color: rgba(197, 187, 176, 0.5);
-      letter-spacing: 1px;
-      animation: fadeIn 1s ease 0.4s backwards;
+    footer {
+      text-align: center;
+      font-size: clamp(11px, 2.5vw, 12px);
+      color: rgba(163, 158, 147, 0.6);
+      letter-spacing: 0.5px;
     }
 
-    /* Responsivo */
-    @media (max-width: 680px) {
-      .options-grid {
-        flex-direction: column;
-        gap: 16px;
+    /* Adaptatibilidad Responsive para Mobiles y Tablets */
+    @media (max-width: 768px) {
+      .mode-grid {
+        grid-template-columns: 1fr;
+        max-width: 460px;
+        margin: 0 auto;
       }
 
       .card {
-        padding: 24px 20px;
+        padding: 22px;
+        gap: 16px;
       }
 
-      .icon-wrapper {
-        width: 56px;
-        height: 56px;
-        font-size: 26px;
-        margin-bottom: 14px;
-      }
-
-      .card-title {
-        font-size: 19px;
+      .card-icon {
+        width: 52px;
+        height: 52px;
       }
     }
 
-    /* Animaciones */
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
+    @media (hover: none) {
+      .card-link:hover .card {
+        transform: none;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      .card-link:active .card {
+        transform: scale(0.98);
+        border-color: var(--card-hover-border);
       }
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Fondo Decorativo -->
-  <div class="bg-container">
-    <div class="bg-grid"></div>
-    <div class="spotlight"></div>
-  </div>
+  <!-- Fondo animado simulado -->
+  <div class="museum-bg"></div>
+  <div class="museum-texture"></div>
 
-  <!-- Contenido Principal -->
   <div class="container">
     
-    <header class="header">
-      <span class="tagline">Galería Interactiva</span>
+    <!-- Encabezado del Menú -->
+    <header>
+      <div class="badge">🏛️ Experiencia Interactiva</div>
       <h1>Museo del <span>Emprendimiento</span></h1>
-      <p class="description">
-        Explora las salas temáticas del safari emprendedor, conoce las métricas clave y pon a prueba tu aprendizaje. Selecciona tu experiencia preferida para comenzar.
-      </p>
+      <p class="subtitle">Selecciona el modo de recorrido que prefieras para explorar la historia, los datos y las metáforas del safari emprendedor.</p>
     </header>
 
-    <div class="options-grid">
+    <!-- Opciones 3D / 2D -->
+    <main class="mode-grid">
       
       <!-- Opción 3D -->
-      <a href="./Museo del Emprendimiento 3D.html" class="card">
-        <div class="icon-wrapper">🏛️</div>
-        <h2 class="card-title">Experiencia 3D</h2>
-        <p class="card-desc">
-          Camina libremente por la galería tridimensional, observa las obras expuestas en los muros e interactúa con el entorno completo.
-        </p>
-        <span class="btn-action">Ingresar en 3D &rarr;</span>
+      <a href="./Museo del Emprendimiento 3D.html" class="card-link" aria-label="Ingresar al Museo en 3D">
+        <article class="card">
+          <div class="card-icon">🕶️</div>
+          <div class="card-body">
+            <h2>Recorrido 3D</h2>
+            <p>Explora un museo tridimensional interactivo con vista en primera persona, iluminación de galería y minimapa integrados.</p>
+          </div>
+          <div class="card-footer">
+            <span class="btn-action">
+              Entrar en 3D
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </span>
+          </div>
+        </article>
       </a>
 
       <!-- Opción 2D -->
-      <a href="./Museo del Emprendimiento 2D.html" class="card">
-        <div class="icon-wrapper">🗺️</div>
-        <h2 class="card-title">Vista Plano 2D</h2>
-        <p class="card-desc">
-          Navega cómodamente sobre el mapa interactivo del museo desde una perspectiva superior. Rápido, liviano y accesible.
-        </p>
-        <span class="btn-action">Ingresar en 2D &rarr;</span>
+      <a href="./Museo del Emprendimiento 2D.html" class="card-link" aria-label="Ingresar al Museo en 2D">
+        <article class="card">
+          <div class="card-icon">🗺️</div>
+          <div class="card-body">
+            <h2>Vista Plano 2D</h2>
+            <p>Camina por el plano bidimensional del museo con controles rápidos, navegación directa entre salas y vista superior.</p>
+          </div>
+          <div class="card-footer">
+            <span class="btn-action">
+              Entrar en 2D
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </span>
+          </div>
+        </article>
       </a>
 
-    </div>
+    </main>
 
-    <footer class="footer">
-      Colección Virtual de Emprendimiento y Desarrollo
+    <!-- Créditos pie de página -->
+    <footer>
+      <p>Safari del Emprendimiento · Todos los derechos reservados</p>
     </footer>
 
   </div>
-
-  <script>
-    // Efecto interactivo de luz en las tarjetas según el cursor
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-      });
-    });
-  </script>
 
 </body>
 </html>
