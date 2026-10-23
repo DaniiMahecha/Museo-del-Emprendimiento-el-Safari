@@ -4,7 +4,7 @@ Museo virtual interactivo para recorrer, en primera persona (3D) o desde arriba 
 
 > Proyecto de la exposición del **Grupo 5**, Universidad EAN (Bogotá, Colombia).
 
-**Demo:** 
+**Demo: https://museo-del-emprendimiento-el-safari.vercel.app/** 
 
 ---
 
