@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Museo del Emprendimiento 3D</title>
+<style>
+:root{--bg:#14110f;--glass:rgba(24,21,19,.88);--ink:#f4efe8;--mut:#b9afa3;--acc:#f2b84b;--ok:#3ddc97;--bad:#ff6b6b;--line:rgba(255,255,255,.12);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#14110f;--glass:rgba(255,252,246,.94);--ink:#1d1a17;--mut:#5f574e;--acc:#b86e00;--line:rgba(0,0,0,.12)}}
+:root[data-theme="light"]{--glass:rgba(255,252,246,.94);--ink:#1d1a17;--mut:#5f574e;--acc:#b86e00;--line:rgba(0,0,0,.12)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#w{display:block;width:100%;height:100%;touch-action:none}
+.glass{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:0 10px 40px rgba(0,0,0,.45)}
+#hud{position:fixed;left:12px;right:12px;top:calc(env(safe-area-inset-top,0px) + 10px);display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:14px}
+#hud h1{font-size:15px;margin:0;letter-spacing:.3px;white-space:nowrap}
+#hud h1 span{color:var(--acc)}
+.prog{flex:1;height:8px;border-radius:9px;background:var(--line);overflow:hidden;min-width:60px}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--ok));transition:width .3s}
+#cnt{font-size:13px;color:var(--mut);white-space:nowrap}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--acc);color:#1b1305;border:0;border-radius:10px;padding:8px 14px;font-weight:700;font-size:13px;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+#help{position:fixed;left:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);padding:8px 12px;border-radius:10px;font-size:12px;color:var(--mut)}
+#panel{position:fixed;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:min(410px,calc(100% - 28px));max-height:64vh;overflow:auto;border-radius:18px;transform:translateY(135%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+#panel.on{transform:none}
+#A{display:block;width:100%;aspect-ratio:16/9;border-radius:18px 18px 0 0}
+.tx{padding:14px 18px 18px}
+.tx small{color:var(--acc);font-weight:700;letter-spacing:.8px;text-transform:uppercase;font-size:11px}
+.tx h2{margin:5px 0 8px;font-size:20px;line-height:1.25}
+.tx p{margin:0;font-size:14.5px;line-height:1.6;color:var(--ink)}
+.tx .btn{margin-top:12px}
+#qm{position:fixed;inset:0;background:rgba(8,6,5,.72);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+#qm.on{display:flex}
+#qb{width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:20px;padding:22px}
+#qb h2{font-size:21px;margin:10px 0 14px;line-height:1.3}
+#qb small{color:var(--mut)}
+.bar{height:6px;background:var(--line);border-radius:6px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc)}
+.opt{display:block;width:100%;text-align:left;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;font-size:15px;transition:.15s}
+.opt:hover{border-color:var(--acc);transform:translateX(3px)}
+.opt.ok{background:rgba(61,220,151,.18);border-color:var(--ok)}
+.opt.bad{background:rgba(255,107,107,.18);border-color:var(--bad)}
+.opt.dim{opacity:.45;pointer-events:none}
+#fb p{font-size:14.5px;line-height:1.55;margin:12px 0 4px}
+.big{font-size:54px!important;font-weight:800;color:var(--acc);margin:6px 0!important}
+#qb .btn{margin:10px 8px 0 0}
+
+#mm{position:fixed;left:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.3)}
+#joy{display:none;position:fixed;left:calc(env(safe-area-inset-left,0px) + 26px);bottom:calc(env(safe-area-inset-bottom,0px) + 30px);width:128px;height:128px;border-radius:50%;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.4);touch-action:none;z-index:5}
+#knob{position:absolute;left:32px;top:32px;width:60px;height:60px;border-radius:50%;background:rgba(242,184,75,.9);box-shadow:0 4px 14px rgba(0,0,0,.5);pointer-events:none}
+@media (pointer:coarse){#joy{display:block}#help{display:none}#mm{left:auto;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}#panel{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 72px);left:14px;right:14px;width:auto;max-width:440px;margin:0 auto;max-height:46vh;transform:translateY(-150%)}#panel.on{transform:none}}
+#w{cursor:grab}
+</style></head><body>
+<canvas id="w"></canvas>
+<div id="hud" class="glass"><h1>🦁 Museo del <span>Emprendimiento</span> 3D</h1><div class="prog"><i id="pg"></i></div><div id="cnt">0/16 obras</div><button class="btn" onclick="qOpen()">🎮 Quiz</button></div>
+<canvas id="mm" width="190" height="100"></canvas>
+<div id="help" class="glass">🧭 <b>W/S</b> mover · <b>A/D</b> lado · <b>←/→</b> girar · arrastra para mirar</div>
+<div id="joy"><div id="knob"></div></div>
+<div id="panel" class="glass"><canvas id="A" width="360" height="203"></canvas><div class="tx"><small id="rm"></small><h2 id="tt"></h2><p id="dd"></p><button class="btn" id="go" onclick="qOpen()" style="display:none">🎮 Comenzar el quiz</button></div></div>
+<div id="qm"><div id="qb" class="glass"></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const S=[
+{r:"Entrada",x:780,y:640,t:"Bienvenidos al Safari del Emprendimiento",d:"No todos los emprendimientos son iguales. En este museo cada animal representa un tipo de emprendimiento. Recorre 4 salas: emprendimientos dinámicos, oportunidad vs. necesidad, Colombia en datos y casos reales. Al final, pon a prueba lo aprendido en el quiz.",c:["#f6b042","#e8553d"],e:"🦁🌅🐘🦒🌿"},
+{r:"Entrada",x:1100,y:640,t:"El origen del safari",d:"En los años 70 y 80, David Birch (MIT) comparó a las empresas con animales: ratones, elefantes y gacelas. Después, Hugo Kantis amplió la metáfora y habló de un safari emprendedor con canguros, delfines y unicornios.",c:["#7b5cd6","#e86fa9"],e:"🦄🐭🐘🦌🐬"},
+{r:"Sala 1 · Emprendimientos dinámicos",x:110,y:90,t:"¿Qué es un emprendimiento dinámico?",d:"Es un proyecto empresarial nuevo o reciente con potencial realizable de crecimiento gracias a una ventaja competitiva, normalmente basada en innovación. Incluye a gacelas, canguros, delfines y unicornios, pero no a los ratones ni a los elefantes.",c:["#2fa36b","#0e5c4a"],e:"🦌📈🚀💡"},
+{r:"Sala 1 · Emprendimientos dinámicos",x:250,y:300,t:"Ratones y elefantes",d:"Ratones: microempresas, muchas, que casi no crecen ni crean empleos nuevos. Elefantes: grandes empresas consolidadas y estables, que se mueven lento y generan pocos empleos nuevos. Ambos son importantes, pero no son emprendimientos dinámicos.",c:["#8e8e93","#3a3a3c"],e:"🐘🐭🏢🏪"},
+{r:"Sala 1 · Emprendimientos dinámicos",x:390,y:90,t:"Gacelas, canguros, delfines y unicornios",d:"Gacelas: empresas jóvenes que crecen rápido y crean muchos empleos. Canguros: tardan, pero despegan fuerte. Delfines: emergen a la superficie y luego se sumergen. Unicornios: empresas valoradas en más de US$1.000 millones.",c:["#2f8fd6","#1d3f8f"],e:"🦄🦌🦘🐬🚀"},
+{r:"Sala 2 · Oportunidad vs. necesidad",x:560,y:90,t:"Dos caminos para emprender",d:"Según el Global Entrepreneurship Monitor (GEM), el emprendedor por oportunidad inicia su negocio inspirado por una idea de mercado. El emprendedor por necesidad lo hace porque es la mejor opción disponible ante la falta de empleo.",c:["#3a7bd5","#00d2a0"],e:"🔀🧭💡💼"},
+{r:"Sala 2 · Oportunidad vs. necesidad",x:700,y:300,t:"Emprender por oportunidad",d:"Es proactivo: la persona detecta un nicho y se lanza a conquistarlo, a veces manteniendo otras fuentes de ingreso. Es voluntario y responde a fuerzas de atracción (pull). Crece cuando la economía va bien, por eso se le llama procíclico.",c:["#f7c948","#f08a24"],e:"💡💻🚀📊"},
+{r:"Sala 2 · Oportunidad vs. necesidad",x:840,y:90,t:"Emprender por necesidad",d:"Es reactivo: una solución de autoempleo que aparece frente al desempleo o la precariedad, empujada por fuerzas externas (push). Aumenta en las crisis, por eso es contracíclico. Suele tener menor supervivencia, aunque algunos negocios maduran y se formalizan.",c:["#8e6e53","#4b3425"],e:"🏪🛒🥟🧺"},
+{r:"Sala 3 · Colombia en datos",x:1010,y:90,t:"Colombia, un país que emprende",d:"El GEM mide la TEA: el porcentaje de adultos de 18 a 64 años que tienen un negocio naciente o nuevo (menos de 42 meses). En el GEM 2023-2024, Colombia registró una TEA de 23,6 y se ubicó entre los países que más emprenden.",c:["#16a085","#1b4f72"],e:"📊🎯💪🏙️"},
+{r:"Sala 3 · Colombia en datos",x:1150,y:300,t:"¿Por qué emprende la gente?",d:"El GEM clasifica la motivación en cuatro razones: ganarse la vida porque los empleos son escasos, generar gran riqueza, marcar una diferencia en el mundo y continuar una tradición familiar. En varios países de Latinoamérica, la primera es la principal.",c:["#9b59b6","#2c3e50"],e:"🎯💰🌍👪🧱"},
+{r:"Sala 3 · Colombia en datos",x:1290,y:90,t:"Colombia frente a la región",d:"Datos de años distintos, solo como referencia: Colombia, TEA 23,6 (GEM 2023-2024); Ecuador, TEA 29,6 (GEM 2025). En Venezuela, 88% de los emprendedores dice emprender para ganarse la vida porque los trabajos son escasos (GEM Venezuela 2025).",c:["#2e86de","#10ac84"],e:"🌎📈🧭📊"},
+{r:"Sala 4 · Casos reales",x:1460,y:90,t:"Caso ratón: la tienda de barrio",d:"Las tiendas de barrio y los vendedores ambulantes son el ejemplo típico del ratón: hay muchísimos, nacen sobre todo por necesidad y casi no crecen. En Colombia, la mayoría de los emprendimientos son de supervivencia y no dinámicos.",c:["#a1887f","#5d4037"],e:"🐭🏪🥖🛒"},
+{r:"Sala 4 · Casos reales",x:1600,y:90,t:"Caso elefante: Ecopetrol",d:"Ecopetrol es una de las mayores empresas del país: grande, consolidada y estable. Es un elefante: aporta solidez a la economía, pero no crece a ritmo de startup ni crea tantos empleos nuevos como una gacela.",c:["#5d6d7e","#1b2631"],e:"🐘🛢️🏭⚡"},
+{r:"Sala 4 · Casos reales",x:1740,y:90,t:"Caso gacela: Bold",d:"Bold cerró 2025 con cerca de 600.000 clientes y una participación cercana al 6% de las transacciones con tarjetas en Colombia. En 2026 fue incluida entre las compañías de mayor crecimiento de Endeavor.",c:["#f39c12","#c0392b"],e:"🦌💳📱📈"},
+{r:"Sala 4 · Casos reales",x:1530,y:300,t:"Caso unicornio: Rappi",d:"Rappi, la superapp fundada en 2015 en Bogotá por Simón Borrero, Felipe Villamarín y Sebastián Mejía, es la startup con mayor valoración en la historia de Colombia: referencia de US$5.200 millones tras su ronda de 2021.",c:["#ff6a4d","#b3261e"],e:"🦄🛵📱🚀"},
+{r:"Sala 4 · Casos reales",x:1670,y:300,t:"Caso unicornio: Habi",d:"Habi, proptech colombiana, se convirtió en el segundo unicornio del país al recaudar US$200 millones en su ronda Serie C, con valoración superior a US$1.000 millones. Addi aparece entre las candidatas a ser el próximo.",c:["#1abc9c","#0b5345"],e:"🦄🏠🔑📲"},
+{r:"Entrada",x:940,y:830,t:"Sala de juegos: el quiz",d:"Pon a prueba lo que viste en las 4 salas con 10 preguntas. Verás la explicación de cada respuesta y tu puntaje final.",c:["#222f3e","#f2b84b"],e:"🎮🏆",quiz:1}
+];
+const NOBRA=S.filter(s=>!s.quiz).length;
+const Q=[
+["¿Qué animal representa a las microempresas que son muchas pero casi no crecen?",["Gacela","Ratón","Delfín"],1,"Los ratones son microempresas numerosas que no crecen ni generan muchos empleos nuevos."],
+["¿Qué tipo de empresa crece rápido y crea muchos empleos?",["Elefante","Ratón","Gacela"],2,"Las gacelas son empresas jóvenes de crecimiento acelerado y alta generación de empleo."],
+["¿Qué es un unicornio en emprendimiento?",["Empresa valorada en más de US$1.000 millones","Empresa con más de 1.000 empleados","Empresa que lleva 1.000 días operando"],0,"Un unicornio supera los US$1.000 millones de valoración."],
+["¿Qué animal del safari se demora, pero despega fuerte?",["Canguro","Delfín","Elefante"],0,"El canguro tarda en arrancar, pero luego despega con fuerza. El delfín emerge y luego se sumerge."],
+["Según el GEM, ¿qué caracteriza al emprendimiento por oportunidad?",["No hay otras opciones de empleo","Nace inspirado por una idea o nicho de mercado","Solo ocurre en grandes empresas"],1,"Es proactivo y voluntario: la persona detecta una oportunidad y actúa sobre ella."],
+["¿Cómo se llama a las fuerzas externas que empujan a emprender por necesidad?",["Pull","Push","Boost"],1,"Las fuerzas push empujan a emprender ante el desempleo; las pull atraen hacia una oportunidad."],
+["¿Qué mide la TEA del GEM?",["El porcentaje de adultos con un negocio naciente o nuevo","Las ventas totales de un país","El número de unicornios de un país"],0,"La TEA es el porcentaje de adultos de 18 a 64 años con un negocio de menos de 42 meses."],
+["¿Cuál es la principal motivación para emprender en varios países de Latinoamérica?",["Generar gran riqueza","Continuar una tradición familiar","Ganarse la vida porque los empleos son escasos"],2,"Así lo muestran los informes GEM recientes de varios países de la región."],
+["¿En qué ciudad se fundó Rappi, la startup más valiosa de Colombia?",["Medellín","Bogotá","Cali"],1,"Rappi nació en Bogotá en 2015."],
+["¿A qué sector pertenece Habi, el segundo unicornio colombiano?",["Proptech (inmobiliario)","Educación en línea","Entrega de domicilios"],0,"Habi es una proptech que reduce la incertidumbre en las transacciones inmobiliarias."]];
+let qi=0,sc=0,lk=0;
+function qOpen(){qi=0;sc=0;qm.classList.add("on");qShow();}
+function qClose(){qm.classList.remove("on");}
+function qShow(){const bx=document.getElementById("qb");
+if(qi>=Q.length){const m=sc>=9?"¡Eres todo un experto del safari! 🦄":sc>=6?"¡Muy bien! Repasa las obras que fallaste. 🦌":"Vuelve a recorrer las salas e inténtalo otra vez. 🐭";
+bx.innerHTML=`<small>Resultado</small><h2>¡Terminaste el quiz!</h2><p class="big">${sc}/${Q.length}</p><p>${m}</p><button class="btn" onclick="qOpen()">Reintentar</button><button class="btn ghost" onclick="qClose()">Volver al museo</button>`;return;}
+const q=Q[qi];lk=0;
+bx.innerHTML=`<small>Pregunta ${qi+1} de ${Q.length}</small><div class="bar"><i style="width:${qi/Q.length*100}%"></i></div><h2>${q[0]}</h2>`+q[1].map((o,i)=>`<button class="opt" onclick="qAns(${i})">${o}</button>`).join("")+`<div id="fb"></div>`;}
+function qAns(i){if(lk)return;lk=1;const q=Q[qi],ok=i==q[2];if(ok)sc++;
+document.querySelectorAll("#qb .opt").forEach((b,j)=>b.classList.add(j==q[2]?"ok":j==i?"bad":"dim"));
+document.getElementById("fb").innerHTML=`<p><b>${ok?"¡Correcto!":"No exactamente."}</b> ${q[3]}</p><button class="btn" onclick="qi++;qShow()">${qi+1<Q.length?"Siguiente":"Ver resultado"}</button>`;}
+addEventListener("keydown",e=>{if(e.key==="Escape")qClose();});
+
+const M=v=>v/40;
+const R=[{n:"Entrada",x:700,y:560,w:480,h:340,fl:0x6b5d4a,wl:0xe3d8c2,top:1},
+{n:"Sala 1 · Dinámicos",x:40,y:40,w:420,h:440,fl:0x3f6b52,wl:0xd5e8da},
+{n:"Sala 2 · Oportunidad vs. necesidad",x:490,y:40,w:420,h:440,fl:0x40587d,wl:0xd5e0f2},
+{n:"Sala 3 · Colombia en datos",x:940,y:40,w:420,h:440,fl:0x7d6540,wl:0xf0e1c8},
+{n:"Sala 4 · Casos reales",x:1390,y:40,w:420,h:440,fl:0x65466f,wl:0xe6d5ee}];
+const SEG=[[0,[[700,560,710,560],[810,560,1180,560],[700,900,1180,900],[700,560,700,900],[1180,560,1180,900]]],
+[1,[[40,40,460,40],[40,480,460,480],[40,40,40,480],[460,40,460,220],[460,320,460,480]]],
+[2,[[490,40,910,40],[490,480,710,480],[810,480,910,480],[490,40,490,220],[490,320,490,480],[910,40,910,220],[910,320,910,480]]],
+[3,[[940,40,1360,40],[940,480,1360,480],[940,40,940,220],[940,320,940,480],[1360,40,1360,220],[1360,320,1360,480]]],
+[4,[[1390,40,1810,40],[1390,480,1810,480],[1390,40,1390,220],[1390,320,1390,480],[1810,40,1810,480]]],
+[1,[[460,220,490,220],[460,320,490,320],[710,480,710,560],[810,480,810,560]]],
+[3,[[910,220,940,220],[910,320,940,320],[1360,220,1390,220],[1360,320,1390,320]]]];
+const KF=[[460,220,30,100],[910,220,30,100],[1360,220,30,100],[710,480,100,80]];
+const CR=[...R.map(r=>[r.x+6,r.y+6,r.w-12,r.h-12]),[450,220,50,100],[900,220,50,100],[1350,220,50,100],[710,470,100,100]];
+const inC=(x,y)=>CR.some(r=>x>=r[0]&&x<=r[0]+r[2]&&y>=r[1]&&y<=r[1]+r[3]);
+const can=(x,z)=>{const ux=x*40,uz=z*40;return [[-14,-14],[14,-14],[-14,14],[14,14]].every(([a,b])=>inC(ux+a,uz+b));};
+/* colocar obras en las paredes */
+const ci={};
+S.forEach(s=>{const k=s.r.slice(0,6).toLowerCase(),ro=R.find(r=>r.n.slice(0,6).toLowerCase()===k),i=ci[k]=(ci[k]===undefined?0:ci[k]+1);
+if(ro.top){if(s.quiz){s.wx=940;s.wy=ro.y+ro.h;s.face="S";}else{s.wx=i==0?880:1060;s.wy=ro.y;s.face="N";}}
+else if(i<3){s.wx=ro.x+70+i*140;s.wy=ro.y;s.face="N";}else{s.wx=ro.x+140+(i-3)*140;s.wy=ro.y+ro.h;s.face="S";}});
+function art(c,s){const w=c.width,h=c.height,a=c.getContext("2d");const gr=a.createLinearGradient(0,0,w,h);gr.addColorStop(0,s.c[0]);gr.addColorStop(1,s.c[1]);a.fillStyle=gr;a.fillRect(0,0,w,h);
+a.fillStyle="rgba(255,255,255,.10)";[[.1,.2,.3],[.9,.85,.4],[.75,.1,.2]].forEach(q=>{a.beginPath();a.arc(w*q[0],h*q[1],h*q[2],0,7);a.fill();});
+a.textAlign="center";a.textBaseline="middle";const E=[...s.e];const rg=a.createRadialGradient(w/2,h/2,h*.05,w/2,h/2,h*.55);rg.addColorStop(0,"rgba(255,255,255,.6)");rg.addColorStop(1,"rgba(255,255,255,0)");a.fillStyle=rg;a.fillRect(0,0,w,h);a.shadowColor="rgba(0,0,0,.45)";a.shadowBlur=h*.05;a.shadowOffsetY=h*.02;a.font=`${h*.64}px serif`;a.fillText(E[0],w/2,h/2+h*.03);a.font=`${h*.28}px serif`;
+[[.12,.2],[.88,.22],[.13,.82],[.87,.8]].forEach((q,i)=>E[i+1]&&a.fillText(E[i+1],w*q[0],h*q[1]));}
+/* escena */
+const cv=document.getElementById("w"),A=document.getElementById("A"),panel=document.getElementById("panel");
+const rd=new THREE.WebGLRenderer({canvas:cv,antialias:true});rd.setPixelRatio(Math.min(devicePixelRatio||1,2));
+const scn=new THREE.Scene();scn.background=new THREE.Color(0x0e0c0a);scn.fog=new THREE.Fog(0x0e0c0a,16,46);
+const cam=new THREE.PerspectiveCamera(70,1,.1,100);cam.rotation.order="YXZ";
+function fit(){rd.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();}
+addEventListener("resize",fit);fit();
+scn.add(new THREE.AmbientLight(0xffffff,.6));scn.add(new THREE.HemisphereLight(0xffffff,0x443322,.35));
+R.forEach(r=>{const l=new THREE.PointLight(0xfff1d6,.9,22);l.position.set(M(r.x+r.w/2),3.4,M(r.y+r.h/2));scn.add(l);});
+const ck=document.createElement("canvas");ck.width=ck.height=128;{const x=ck.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,128,128);x.fillStyle="#cfc9bf";x.fillRect(0,0,64,64);x.fillRect(64,64,64,64);}
+function plane(x,y,w,h,col,yy,up){const t=new THREE.CanvasTexture(ck);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(w/80,h/80);
+const m=new THREE.Mesh(new THREE.PlaneGeometry(M(w),M(h)),new THREE.MeshStandardMaterial({color:col,map:up?null:t,roughness:.65}));m.rotation.x=up?Math.PI/2:-Math.PI/2;m.position.set(M(x+w/2),yy,M(y+h/2));scn.add(m);}
+R.forEach(r=>{plane(r.x,r.y,r.w,r.h,r.fl,0,0);plane(r.x,r.y,r.w,r.h,0x2a2623,4,1);});
+KF.forEach(k=>{plane(k[0],k[1],k[2],k[3],0x4a4540,0,0);plane(k[0],k[1],k[2],k[3],0x2a2623,4,1);});
+const WM=R.map(r=>new THREE.MeshStandardMaterial({color:r.wl,roughness:.9}));
+SEG.forEach(([ri,list])=>list.forEach(([a,b,c,d])=>{const hz=b==d,L=M(Math.abs(hz?c-a:d-b))+.3;
+const m=new THREE.Mesh(new THREE.BoxGeometry(hz?L:.3,4,hz?.3:L),WM[ri]);m.position.set(M((a+c)/2),2,M((b+d)/2));scn.add(m);
+const z=new THREE.Mesh(new THREE.BoxGeometry(hz?L:.34,.25,hz?.34:L),new THREE.MeshStandardMaterial({color:0x2b2118}));z.position.set(M((a+c)/2),.12,M((b+d)/2));scn.add(z);}));
+R.forEach((r,i)=>{if(i){const bn=new THREE.Mesh(new THREE.BoxGeometry(2.6,.5,.8),new THREE.MeshStandardMaterial({color:0x4a3a2a}));bn.position.set(M(r.x+r.w/2),.25,M(r.y+r.h/2));scn.add(bn);}});
+function txtTex(txt,w,h,fs,bg,fg,border){const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");if(bg){x.fillStyle=bg;x.fillRect(0,0,w,h);}
+if(border){x.strokeStyle=border;x.lineWidth=4;x.strokeRect(2,2,w-4,h-4);}x.fillStyle=fg;let f=fs;x.font=`700 ${f}px system-ui,sans-serif`;while(x.measureText(txt).width>w-40&&f>14){f--;x.font=`700 ${f}px system-ui,sans-serif`;}
+x.textAlign="center";x.textBaseline="middle";x.fillText(txt,w/2,h/2+2);return new THREE.CanvasTexture(c);}
+R.forEach(r=>{const sw=r.top?6:8,sh=r.top?.75:1;const m=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),new THREE.MeshBasicMaterial({map:txtTex(r.n.toUpperCase(),1024,128,64,null,"#f2b84b"),transparent:true}));
+m.position.set(r.top?M(995):M(r.x+r.w/2),3.35,M(r.y)+.17);scn.add(m);});
+S.forEach((s,i)=>{const c=document.createElement("canvas");c.width=512;c.height=320;art(c,s);const t=new THREE.CanvasTexture(c);
+const n=s.face=="N",g=new THREE.Group();g.position.set(M(s.wx),1.95,M(s.wy)+(n?.2:-.2));g.rotation.y=n?0:Math.PI;
+s.fm=new THREE.MeshStandardMaterial({color:s.quiz?0xc9a35a:0x2b2118,emissive:0x000000,roughness:.5});
+g.add(new THREE.Mesh(new THREE.BoxGeometry(3.2,2.1,.12),s.fm));
+const pic=new THREE.Mesh(new THREE.PlaneGeometry(2.9,1.8),new THREE.MeshBasicMaterial({map:t}));pic.position.z=.07;g.add(pic);
+const pl=new THREE.Mesh(new THREE.PlaneGeometry(2.6,.39),new THREE.MeshBasicMaterial({map:txtTex((s.quiz?"🎮 ":(i+1)+". ")+s.t,640,96,34,"#17120e","#f2b84b","#c9a35a")}));pl.position.set(0,-1.45,.03);g.add(pl);scn.add(g);});
+/* estado, controles y minimapa */
+const keys={};let yaw=0,pitch=0,walking=false,drag=false,lx=0,ly=0,cur=-2;const seen=new Set(),P={x:23.5,z:19};
+addEventListener("keydown",e=>{const k=e.key.toLowerCase();keys[k]=1;if(k.startsWith("arrow"))e.preventDefault();});
+addEventListener("keyup",e=>keys[e.key.toLowerCase()]=0);
+let lid=null;cv.addEventListener("pointerdown",e=>{if(lid!==null)return;lid=e.pointerId;drag=true;lx=e.clientX;ly=e.clientY;});
+addEventListener("pointermove",e=>{if(!drag||e.pointerId!==lid)return;yaw-=(e.clientX-lx)*.005;pitch=Math.max(-1,Math.min(1,pitch-(e.clientY-ly)*.005));lx=e.clientX;ly=e.clientY;});
+addEventListener("pointerup",e=>{if(e.pointerId===lid){drag=false;lid=null;}});addEventListener("pointercancel",e=>{if(e.pointerId===lid){drag=false;lid=null;}});
+const joy=document.getElementById("joy"),kn=document.getElementById("knob");let jx=0,jy=0,jid=null;
+function jmove(e){const b=joy.getBoundingClientRect();let dx=e.clientX-(b.left+b.width/2),dy=e.clientY-(b.top+b.height/2);const m=Math.hypot(dx,dy),mx=46;if(m>mx){dx=dx/m*mx;dy=dy/m*mx;}jx=dx/mx;jy=dy/mx;kn.style.transform=`translate(${dx}px,${dy}px)`;}
+joy.addEventListener("pointerdown",e=>{jid=e.pointerId;joy.setPointerCapture(e.pointerId);jmove(e);e.stopPropagation();});
+joy.addEventListener("pointermove",e=>{if(e.pointerId===jid)jmove(e);});
+const jend=e=>{if(e.pointerId===jid){jid=null;jx=jy=0;kn.style.transform="";}};
+joy.addEventListener("pointerup",jend);joy.addEventListener("pointercancel",jend);
+const mmc=document.getElementById("mm").getContext("2d"),sk=190/1850;
+function mmDraw(){const g=mmc;g.clearRect(0,0,190,100);R.forEach(r=>{g.fillStyle="#"+r.fl.toString(16).padStart(6,"0");g.fillRect(r.x*sk,r.y*sk,r.w*sk,r.h*sk);});
+KF.forEach(k=>{g.fillStyle="#666";g.fillRect(k[0]*sk,k[1]*sk,k[2]*sk,k[3]*sk);});
+S.forEach((s,i)=>{g.fillStyle=cur==i?"#fff":seen.has(i)?"#3ddc97":"#f2b84b";g.fillRect(s.wx*sk-2,s.wy*sk-2,4,4);});
+g.save();g.translate(P.x*40*sk,P.z*40*sk);g.rotate(-yaw);g.fillStyle="#fff";g.beginPath();g.moveTo(0,-6);g.lineTo(4,4);g.lineTo(-4,4);g.closePath();g.fill();g.restore();}
+function show(i){if(i===cur)return;cur=i;if(i<0){panel.classList.remove("on");return;}const s=S[i];art(A,s);rm.textContent=s.r;tt.textContent=s.t;dd.textContent=s.d;go.style.display=s.quiz?"inline-block":"none";panel.classList.add("on");
+if(!s.quiz){seen.add(i);cnt.textContent=seen.size+"/"+NOBRA+" obras";pg.style.width=seen.size/NOBRA*100+"%";}}
+const clk=new THREE.Clock();
+function tick(){const dt=Math.min(clk.getDelta(),.05),qo=qm.classList.contains("on");
+let f=(keys.w||keys.arrowup||walking?1:0)-(keys.s||keys.arrowdown?1:0)-jy,sd=(keys.d?1:0)-(keys.a?1:0)+jx,tr=(keys.arrowleft?1:0)-(keys.arrowright?1:0);
+if(qo)f=sd=tr=0;yaw+=tr*1.9*dt;
+const sy=Math.sin(yaw),cy=Math.cos(yaw);let vx=-sy*f+cy*sd,vz=-cy*f-sy*sd;const m=Math.hypot(vx,vz);
+if(m){const k=Math.min(1,m)/m*4.5*dt;vx*=k;vz*=k;if(can(P.x+vx,P.z))P.x+=vx;if(can(P.x,P.z+vz))P.z+=vz;}
+cam.position.set(P.x,1.7,P.z);cam.rotation.set(pitch,yaw,0);
+let best=-1,bd=4.3;S.forEach((s,i)=>{const d=Math.hypot(M(s.wx)-P.x,M(s.wy)-P.z);if(d<bd){bd=d;best=i;}});show(best);
+S.forEach((s,i)=>s.fm.emissive.setHex(i===cur?0x7a5400:seen.has(i)?0x0d4d2b:0));
+rd.render(scn,cam);mmDraw();requestAnimationFrame(tick);}
+tick();
+
+</script></body></html>
